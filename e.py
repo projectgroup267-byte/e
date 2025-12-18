@@ -77,3 +77,35 @@ st.bar_chart(
     data=content_metrics,
     x="content_type"
 )
+# ----------------------------
+# Campaign ROI Analysis
+# ----------------------------
+st.title("💰 Campaign ROI Analysis")
+
+# Filter only rows with campaign data
+campaign_df = df[df["campaign_name"].notna()]
+
+# Group by campaign
+campaign_summary = (
+    campaign_df.groupby("campaign_name")[["campaign_cost", "revenue_generated"]]
+    .sum()
+    .reset_index()
+)
+
+# Calculate ROI
+campaign_summary["ROI (%)"] = (
+    (campaign_summary["revenue_generated"] - campaign_summary["campaign_cost"])
+    / campaign_summary["campaign_cost"]
+) * 100
+
+# Display table
+st.subheader("📌 Campaign-wise ROI Summary")
+st.dataframe(campaign_summary)
+
+# Bar chart for ROI
+st.subheader("📊 ROI Comparison by Campaign")
+st.bar_chart(
+    data=campaign_summary,
+    x="campaign_name",
+    y="ROI (%)"
+)
