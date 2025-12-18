@@ -78,40 +78,28 @@ st.bar_chart(
     x="content_type"
 )
 # ----------------------------
-# Campaign ROI Analysis (SAFE VERSION)
+# Campaign ROI Analysis (Using existing ROI column)
 # ----------------------------
 st.title("💰 Campaign ROI Analysis")
 
-required_columns = {"campaign_name", "campaign_cost", "revenue_generated"}
+# Filter campaigns
+campaign_df = df[df["campaign_name"].notna()]
 
-# Check if required columns exist
-if not required_columns.issubset(df.columns):
-    st.error("Required columns for ROI analysis are missing in the dataset.")
-    st.write("Available columns:", list(df.columns))
-else:
-    # Filter valid campaigns
-    campaign_df = df[df["campaign_name"].notna()]
+# Group by campaign and take average ROI
+campaign_roi = (
+    campaign_df.groupby("campaign_name")[["roi", "ad_spend"]]
+    .mean()
+    .reset_index()
+)
 
-    # Group by campaign
-    campaign_summary = (
-        campaign_df.groupby("campaign_name")[["campaign_cost", "revenue_generated"]]
-        .sum()
-        .reset_index()
-    )
+# Display table
+st.subheader("📌 Campaign-wise ROI Summary")
+st.dataframe(campaign_roi)
 
-    # Calculate ROI
-    campaign_summary["roi (%)"] = (
-        (campaign_summary["revenue_generated"] - campaign_summary["campaign_cost"])
-        / campaign_summary["campaign_cost"]
-    ) * 100
-
-    # Display results
-    st.subheader("📌 Campaign-wise ROI Summary")
-    st.dataframe(campaign_summary)
-
-    st.subheader("📊 ROI Comparison by Campaign")
-    st.bar_chart(
-        data=campaign_summary,
-        x="campaign_name",
-        y="ROI (%)"
-    )
+# Bar chart for ROI
+st.subheader("📊 ROI Comparison by Campaign")
+st.bar_chart(
+    data=campaign_roi,
+    x="campaign_name",
+    y="roi"
+)
