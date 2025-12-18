@@ -19,7 +19,7 @@ st.title("📊 Engagement Rate Analysis")
 # ----------------------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv("social_media_engagement.csv")
+    df = pd.read_csv("social_media_engagement_enhanced (1)")
     return df
 
 df = load_data()
