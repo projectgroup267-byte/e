@@ -100,7 +100,7 @@ else:
     )
 
     # Calculate ROI
-    campaign_summary["ROI (%)"] = (
+    campaign_summary["roi (%)"] = (
         (campaign_summary["revenue_generated"] - campaign_summary["campaign_cost"])
         / campaign_summary["campaign_cost"]
     ) * 100
