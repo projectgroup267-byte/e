@@ -103,3 +103,33 @@ st.bar_chart(
     x="campaign_name",
     y="roi"
 )
+# ----------------------------
+# Optimal Posting Time Analysis
+# ----------------------------
+st.title("⏰ Optimal Posting Time Analysis")
+
+# Group by post hour
+hourly_engagement = (
+    df.groupby("post_hour")["engagement"]
+    .mean()
+    .reset_index()
+)
+
+# Display table
+st.subheader("📌 Average Engagement by Post Hour")
+st.dataframe(hourly_engagement)
+
+# Line chart for engagement vs hour
+st.subheader("📈 Engagement Trend by Posting Hour")
+st.line_chart(
+    data=hourly_engagement,
+    x="post_hour",
+    y="engagement"
+)
+
+# Best posting hour
+best_hour = hourly_engagement.loc[
+    hourly_engagement["engagement"].idxmax(), "post_hour"
+]
+
+st.success(f"✅ Best time to post is around **{best_hour}:00 hours**")
