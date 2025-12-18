@@ -54,3 +54,26 @@ st.bar_chart(
     x="platform",
     y="engagement_rate"
 )
+# ----------------------------
+# Content Performance - Idea 2
+# Engagement Components Comparison
+# ----------------------------
+st.title("📊 Content Performance: Likes, Comments & Shares")
+
+# Group by content type
+content_metrics = (
+    df.groupby("content_type")[["likes", "comments", "shares"]]
+    .mean()
+    .reset_index()
+)
+
+# Display table
+st.subheader("📌 Average Engagement Metrics by Content Type")
+st.dataframe(content_metrics)
+
+# Bar chart for comparison
+st.subheader("📊 Content Type vs Engagement Metrics")
+st.bar_chart(
+    data=content_metrics,
+    x="content_type"
+)
